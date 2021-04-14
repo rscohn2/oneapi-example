@@ -19,7 +19,7 @@ jobs:
     - name: Install prerequisites
       run: |
           apt-get update -qq
-          apt install -qq python3 python3-pip
+          apt install -qq -y python3 python3-pip
           python3 -m pip install --quiet --upgrade pip
           python3 -m pip install --quiet -r requirements.txt
     - name: Checks
@@ -39,7 +39,7 @@ jobs:
     - name: Install prerequisites
       run: |
           apt-get update -qq
-          apt install -qq python3 python3-pip
+          apt install -qq -y python3 python3-pip
           python3 -m pip install --quiet --upgrade pip
           python3 -m pip install --quiet -r requirements.txt
     - name: Install spack
@@ -84,7 +84,7 @@ jobs:
     - name: Install prerequisites
       run: |
           apt-get update -qq
-          apt install -qq python3 python3-pip
+          apt install -qq -y python3 python3-pip
           python3 -m pip install --quiet --upgrade pip
           python3 -m pip install --quiet -r requirements.txt
     - name: Install spack
