@@ -8,42 +8,20 @@ env:
   SPACK_REPO: spack/spack
   SPACK_BRANCH: develop
 
-jobs:
-  checks:
+  debian:
     runs-on: ubuntu-20.04
     container:
       image: debian:9
-    steps:
-    - uses: actions/checkout@v2
-    # - uses: actions/setup-python@v2
-    - name: Install prerequisites
-      run: |
-          apt-get update -qq
-          apt install -qq -y python3 python3-pip git curl
-          python3 -m pip install --quiet --upgrade pip
-          python3 -m pip install --quiet -r requirements.txt
-    - name: Checks
-      run: |
-        pre-commit run --all
-
-  gcc:
-    runs-on: ${{ matrix.os }}
-    container:
-      image: debian:9
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-20.04]
         part: [1, 2]
     steps:
-    - uses: actions/checkout@v2
-    # - uses: actions/setup-python@v2
     - name: Install prerequisites
       run: |
           apt-get update -qq
           apt install -qq -y python3 python3-pip git curl
-          python3 -m pip install --quiet --upgrade pip
-          python3 -m pip install --quiet -r requirements.txt
+    - uses: actions/checkout@v2
     - name: Install spack
       uses: actions/checkout@v2
       with:
@@ -53,68 +31,4 @@ jobs:
     - name: Package tests
       run: |
         . spack/share/spack/setup-env.sh
-        spack repo add ./repo
-        pytest -s tests/test_packages.py::test_gcc_${{ matrix.part }}
-        pytest -s tests/test_packages.py::test_virtual
-    - name: Load test
-      run: |
-        . spack/share/spack/setup-env.sh
-        pytest -s tests/test_packages.py::test_load
-    - uses: actions/upload-artifact@v2
-      if: failure()
-      with:
-        name: gcc-${{ matrix.part }}-${{ matrix.os }}-logs
-        path: |
-          /tmp/runner/spack-stage/
-          /tmp/runner/intel-oneapi-installer/
-          !/tmp/runner/**/*.sh
-          bootstrapper*
-          installer*
-        retention-days: 7
-
-  intel-compiler:
-    runs-on: ${{ matrix.os }}
-    container:
-      image: debian:9
-    strategy:
-      fail-fast: false
-      matrix:
-        compiler: [icc, icx]
-        part: [1, 2, 3]
-        os: [ubuntu-20.04]
-    steps:
-    - uses: actions/checkout@v2
-    # - uses: actions/setup-python@v2
-    - name: Install prerequisites
-      run: |
-          apt-get update -qq
-          apt install -qq -y python3 python3-pip git curl
-          python3 -m pip install --quiet --upgrade pip
-          python3 -m pip install --quiet -r requirements.txt
-
-    - name: Install spack
-      uses: actions/checkout@v2
-      with:
-        repository: ${{ env.SPACK_REPO }}
-        path: spack
-        ref: ${{ env.SPACK_BRANCH }}
-    - name: Package tests
-      run: |
-        . spack/share/spack/setup-env.sh
-        spack repo add ./repo
         spack install intel-oneapi-compilers
-        spack clean --downloads
-        spack compiler add `spack location -i intel-oneapi-compilers`/compiler/latest/linux/bin/intel64
-        spack compiler add `spack location -i intel-oneapi-compilers`/compiler/latest/linux/bin
-        pytest -s tests/test_packages.py::test_${{ matrix.compiler }}_${{ matrix.part }}
-    - uses: actions/upload-artifact@v2
-      if: failure()
-      with:
-        name: ${{ matrix.compiler }}-${{ matrix.part }}-${{ matrix.os }}-logs
-        path: |
-          /tmp/runner/spack-stage/
-          /tmp/runner/intel-oneapi-installer/
-          !/tmp/runner/**/*.sh
-          bootstrapper*
-          installer*
-        retention-days: 7
