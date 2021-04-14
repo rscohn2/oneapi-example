@@ -8,6 +8,7 @@ env:
   SPACK_REPO: spack/spack
   SPACK_BRANCH: develop
 
+jobs:
   debian:
     runs-on: ubuntu-20.04
     container:
