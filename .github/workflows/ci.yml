@@ -15,11 +15,13 @@ jobs:
       image: debian:9
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/setup-python@v2
+    # - uses: actions/setup-python@v2
     - name: Install prerequisites
       run: |
-          python -m pip install --quiet --upgrade pip
-          pip install --quiet -r requirements.txt
+          apt-get update -qq
+          apt install -qq python3 python3-pip
+          python3 -m pip install --quiet --upgrade pip
+          python3 -m pip install --quiet -r requirements.txt
     - name: Checks
       run: |
         pre-commit run --all
@@ -33,11 +35,13 @@ jobs:
         part: [1, 2]
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/setup-python@v2
+    # - uses: actions/setup-python@v2
     - name: Install prerequisites
       run: |
-          python -m pip install --quiet --upgrade pip
-          pip install --quiet -r requirements.txt
+          apt-get update -qq
+          apt install -qq python3 python3-pip
+          python3 -m pip install --quiet --upgrade pip
+          python3 -m pip install --quiet -r requirements.txt
     - name: Install spack
       uses: actions/checkout@v2
       with:
@@ -76,11 +80,13 @@ jobs:
         os: [ubuntu-20.04]
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/setup-python@v2
+    # - uses: actions/setup-python@v2
     - name: Install prerequisites
       run: |
-          python -m pip install --quiet --upgrade pip
-          pip install --quiet -r requirements.txt
+          apt-get update -qq
+          apt install -qq python3 python3-pip
+          python3 -m pip install --quiet --upgrade pip
+          python3 -m pip install --quiet -r requirements.txt
     - name: Install spack
       uses: actions/checkout@v2
       with:
