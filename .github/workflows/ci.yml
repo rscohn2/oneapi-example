@@ -52,13 +52,13 @@ jobs:
         ref: ${{ env.SPACK_BRANCH }}
     - name: Package tests
       run: |
-        source spack/share/spack/setup-env.sh
+        . spack/share/spack/setup-env.sh
         spack repo add ./repo
         pytest -s tests/test_packages.py::test_gcc_${{ matrix.part }}
         pytest -s tests/test_packages.py::test_virtual
     - name: Load test
       run: |
-        source spack/share/spack/setup-env.sh
+        . spack/share/spack/setup-env.sh
         pytest -s tests/test_packages.py::test_load
     - uses: actions/upload-artifact@v2
       if: failure()
@@ -100,7 +100,7 @@ jobs:
         ref: ${{ env.SPACK_BRANCH }}
     - name: Package tests
       run: |
-        source spack/share/spack/setup-env.sh
+        . spack/share/spack/setup-env.sh
         spack repo add ./repo
         spack install intel-oneapi-compilers
         spack clean --downloads
