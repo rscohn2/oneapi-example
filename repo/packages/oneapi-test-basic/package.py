@@ -49,7 +49,9 @@ class OneapiTestBasic(Package):
         for c in OneapiTestBasic.samples:
             if '+all' in self.spec or f'+{c}' in self.spec:
                 if c == 'mpi':
-                    targets.append(f'MPI_PREFIX={self.spec["mpi"].prefix}')
+                    targets.append(
+                        f'MPI_PREFIX={self.spec["mpi"].prefix}/mpi/latest'
+                    )
                 if c == 'mkl':
                     targets.append(
                         f'MKL_LD_FLAGS={self.spec["blas"].libs.ld_flags}'
