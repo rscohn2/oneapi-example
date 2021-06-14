@@ -40,7 +40,8 @@ jobs:
     - name: Install prerequisites
       run: |
           python -m pip install --quiet --upgrade pip
-          pip install --quiet -r requirements.txt
+          # requirements.txt has some python3 only packages
+          pip install --quiet pytest
     - name: Install spack
       uses: actions/checkout@v2
       with:
